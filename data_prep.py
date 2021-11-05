@@ -1,9 +1,9 @@
-import re
+import re, os
 from collections import defaultdict
 
 import pandas as pd
 
-def load_tags(path: str, ocr_fixes_path: str):
+def load_tags(path: list, ocr_fixes_path: str):
     """Returns a dictionary that maps BRI abbreviations to journal titles"""
 
     # this spreadsheet contains mappings between BRI abbreviations and journal names
@@ -50,7 +50,8 @@ def count_reviews(raw_df, tag_map: dict):
 
     books_df = pd.DataFrame.from_dict(books, orient='index')
     books_df = books_df.fillna(0)
-    books_df = books_df.astype('int32')
+    dtypes = {col: str if col == 'Period' else int for col in books_df.columns}
+    books_df = books_df.astype(dtypes)
 
     return books_df
 
@@ -63,25 +64,45 @@ def author_compile(books_df):
 def main():
     """Loads, preprocesses, and saves review data for replication notebooks."""
 
-    tags_path = 'tags/1965-1985.tsv'
+    tag_paths = [
+        'tags/1965-1985.tsv',
+        'tags/2000.tsv'
+    ]
     ocr_fixes_path = 'tags/OCR_corrections_1965.tsv'
-    raw_data_path = 'data/raw/1965-1984_Vol1-Vol7.csv'
-    books_dest_path = 'data/processed/book_reviews.tsv'
-    authors_dest_path = 'data/processed/author_reviews.tsv'
+    raw_data_fnames = [
+        '1965-1984.csv',
+        '1985-1992.csv',
+        '1993-1997.csv',
+        '1998-2000.csv',
+    ]
+    books_dest_path = 'data/processed/book_reviews_full.tsv'
+    authors_dest_path = 'data/processed/author_reviews_full.tsv'
 
     # load tags
     print('Loading tags.')
-    tag_map = load_tags(tags_path, ocr_fixes_path)
+    tag_map = {}
+    for path in tag_paths:
+        tag_map = tag_map | load_tags(path, ocr_fixes_path)
 
     # raw data comes as title-level rows with a single cell for ALL reviews for that title
-    print('Loading raw review data.')
-    raw_df = pd.read_csv(raw_data_path, encoding='latin-1')
+    dfs = []
+  
+    for fname in raw_data_fnames:
+
+        print(f'Loading raw review data: {fname}')
+        path = os.path.join('data/raw', fname)
+        df = pd.read_csv(path, encoding='latin-1')
+        df = df[['Author', 'Title', 'Review']]
+        df['Period'] = fname.split('.csv')[0]
+        dfs.append(df)
+    raw_df = pd.concat(dfs, axis=0)
 
     print('Counting book-level reviews.')
     books_df = count_reviews(raw_df=raw_df, tag_map=tag_map)
     books_df.to_csv(books_dest_path, sep='\t')
 
     print('Compiling author-level reviews.')
+    # TO DO: fix this so that it correctly joins dates
     author_compile(books_df).to_csv(authors_dest_path, sep='\t')
 
 if __name__ == '__main__':
