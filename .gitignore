@@ -2,6 +2,7 @@ data
 tags/tagsource
 notebooks/.ipynb_checkpoints
 notebooks/old
+notebooks/temp.ipynb
 writing
 .venv
 .vscode
