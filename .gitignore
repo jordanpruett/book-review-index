@@ -6,4 +6,4 @@ notebooks/temp.ipynb
 writing
 .venv
 .vscode
-
+__pycache__
