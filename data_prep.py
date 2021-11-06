@@ -50,8 +50,7 @@ def count_reviews(raw_df, tag_map: dict):
 
     books_df = pd.DataFrame.from_dict(books, orient='index')
     books_df = books_df.fillna(0)
-    dtypes = {col: str if col == 'Period' else int for col in books_df.columns}
-    books_df = books_df.astype(dtypes)
+    books_df = books_df.astype(int)
 
     return books_df
 
