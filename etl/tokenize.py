@@ -4,8 +4,6 @@ Specialized tokenizer classes for parsing the Book Review Index.
 from typing import List
 from flair.data import Tokenizer, Token
 
-# we have to declare a custom tokenizer that splits on spaces and apostrophes,
-# which it removes, or on dashes, which it keeps
 class ReviewTokenizer(Tokenizer):
     """
     Custom tokenizer used for review tagger. Splits on spaces and apostrophes, which it removes,
@@ -22,7 +20,7 @@ class ReviewTokenizer(Tokenizer):
     @staticmethod
     def run_tokenize(text: str) -> List[Token]:
         """
-        Primary tokenization method. Splits on spaces and apostrophes, which it removes, 
+        Primary tokenization method. Splits on spaces and apostrophes, which it removes,
         as well as on dashes, which it keeps. Returns a list of Flair Token objects.
         """
 
