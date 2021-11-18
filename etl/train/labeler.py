@@ -1,0 +1,47 @@
+"""
+This module trains a custom Sequence Tagger in Flair, using the character-level
+language model trained in model.py. Only needs to be run once.
+"""
+
+from flair.data import Corpus
+from flair.datasets import ColumnCorpus
+from flair.embeddings import FlairEmbeddings
+from flair.models import SequenceTagger
+from flair.trainers import ModelTrainer
+
+def main():
+
+    columns = {0: 'text', 1: 'tag'}
+
+    data_folder = 'labeler'
+
+    corpus: Corpus = ColumnCorpus(
+        data_folder, columns,
+        train_file='train.txt',
+        test_file='test.txt',
+        dev_file='valid.txt'
+    )
+
+    tag_dictionary = corpus.make_tag_dictionary('tag')
+
+    embeddings = FlairEmbeddings('model/best-lm.pt')
+
+    tagger: SequenceTagger = SequenceTagger(
+        hidden_size=256,
+        embeddings=embeddings,
+        tag_dictionary=tag_dictionary,
+        tag_type='tag',
+        use_crf=True
+    )
+
+    trainer : ModelTrainer = ModelTrainer(tagger, corpus)
+
+    trainer.train(
+        'labeler/models',
+        learning_rate=0.1,
+        mini_batch_size=32,
+        max_epochs=150
+    )
+
+if __name__=='__main__':
+    main()
