@@ -2,7 +2,9 @@
 This module trains a custom Sequence Tagger in Flair, using the character-level
 language model trained in model.py. Only needs to be run once.
 """
+import os
 
+import torch
 from flair.data import Corpus
 from flair.datasets import ColumnCorpus
 from flair.embeddings import FlairEmbeddings
@@ -24,7 +26,7 @@ def main():
 
     tag_dictionary = corpus.make_tag_dictionary('tag')
 
-    embeddings = FlairEmbeddings('model/best-lm.pt')
+    embeddings = FlairEmbeddings(os.path.join('model', 'best-lm.pt'))
 
     tagger: SequenceTagger = SequenceTagger(
         hidden_size=256,
@@ -37,11 +39,18 @@ def main():
     trainer : ModelTrainer = ModelTrainer(tagger, corpus)
 
     trainer.train(
-        'labeler/models',
+        os.path.join('labeler', 'models'),
         learning_rate=0.1,
         mini_batch_size=32,
         max_epochs=150
     )
 
 if __name__=='__main__':
+
+    if not torch.cuda.is_available():
+        print("Warning: GPU not available. Defaulting to CPU.")
+    else:
+        print("Using GPU.")
+    print(torch.cuda.is_available())
     main()
+    
