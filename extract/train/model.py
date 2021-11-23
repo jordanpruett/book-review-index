@@ -1,7 +1,11 @@
 """
 This module trains a custom language model, to be later used by the sequence labeler.
-Only needs to be run once.
+Only needs to be run once for each model.
 """
+import os
+
+import torch
+import flair
 from flair.data import Dictionary
 from flair.models import LanguageModel
 from flair.trainers.language_model_trainer import LanguageModelTrainer, TextCorpus
@@ -15,7 +19,7 @@ def main():
 
     # our dataset is mostly made up of thousands of arbitrary abbreviations,
     # so we specify a character-level model
-    corpus = TextCorpus('corpus',
+    corpus = TextCorpus(os.path.join('embeddings', 'full', 'corpus'),
                         dictionary,
                         is_forward_lm,
                         character_level=True)
@@ -23,15 +27,21 @@ def main():
     # a hidden size of 512 offers a good balance of complexity to training time
     language_model = LanguageModel(dictionary,
                                 is_forward_lm,
-                                hidden_size=512,
+                                hidden_size=1024,
                                 nlayers=1)
 
     # train model
     trainer = LanguageModelTrainer(language_model, corpus)
-    trainer.train('models',
-                sequence_length=50,
-                mini_batch_size=20,
+    trainer.train('full',
+                sequence_length=125,
+                mini_batch_size=50,
                 max_epochs=10)
 
 if __name__=='__main__':
+
+    if not torch.cuda.is_available():
+        print('Warning: GPU not available. Flair will default to CPU.')
+    else:
+        print('Using device:', flair.device)
+
     main()
