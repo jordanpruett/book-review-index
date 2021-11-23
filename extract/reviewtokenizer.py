@@ -53,7 +53,10 @@ class ReviewTokenizer(Tokenizer):
                             whitespace_after=False
                         )
                     )
-                whitespace_after = text[index+1] == " "
+                try:
+                    whitespace_after = text[index+1] == " "
+                except IndexError:
+                    whitespace_after = False
                 tokens.append(
                     Token(
                         text="-",
