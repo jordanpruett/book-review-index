@@ -28,7 +28,7 @@ def main():
         path = os.path.join('data', 'raw', fn)
         raw = pd.read_csv(path, encoding='latin-1')
 
-        print(f'Parsing spreadsheet #{i}')
+        print(f'Parsing spreadsheet #{i+1}')
         # list of dicts, where each dict is one parsed review
         review_df_rows = []
         count = 0
@@ -54,7 +54,7 @@ def main():
         df = pd.DataFrame(review_df_rows)
         df = df[['author', 'title', 'J', 'V', 'M', 'D', 'Y', 'P', 'L']]
         df.to_csv(
-            os.path.join('data', 'processed', f'data{i}.tsv'),
+            os.path.join('data', 'processed', f'data{i+1}.tsv'),
              index=False,
              sep='\t'
         )
