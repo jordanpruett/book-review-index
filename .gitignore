@@ -1,4 +1,5 @@
 .venv
+.winvenv
 .vscode
 __pycache__
 
@@ -12,6 +13,7 @@ writing
 test.py
 
 extract/train/labeler
-extract/train/model
+extract/train/embeddings
 extract/train/training.tsv
 extract/data_prep.ipynb
+extract/full
