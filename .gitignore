@@ -15,5 +15,5 @@ test.py
 extract/train/labeler
 extract/train/embeddings
 extract/train/training.tsv
+extract/train/full
 extract/data_prep.ipynb
-extract/full
