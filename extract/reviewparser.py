@@ -75,8 +75,8 @@ class ReviewParser:
 
             for label in span.labels:
 
-                # each review can only have exactly one of each field
-                if label.value in current_review:
+                # each review can only have exactly one journal
+                if label.value in current_review and label.value == 'J':
 
                     reviews.append(current_review)
                     current_review = {label.value: span.text}
