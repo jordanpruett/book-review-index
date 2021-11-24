@@ -16,4 +16,5 @@ extract/train/labeler
 extract/train/embeddings
 extract/train/training.tsv
 extract/train/full
+extract/train/flairparser
 extract/data_prep.ipynb
