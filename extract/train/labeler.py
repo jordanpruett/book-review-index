@@ -5,6 +5,7 @@ language model trained in model.py. Only needs to be run once.
 import os
 
 import torch
+import flair
 from flair.data import Corpus
 from flair.datasets import ColumnCorpus
 from flair.embeddings import FlairEmbeddings
@@ -50,7 +51,7 @@ if __name__=='__main__':
     if not torch.cuda.is_available():
         print("Warning: GPU not available. Defaulting to CPU.")
     else:
-        print("Using GPU.")
+        print("Using device: ", flair.device)
     print(torch.cuda.is_available())
     main()
     
