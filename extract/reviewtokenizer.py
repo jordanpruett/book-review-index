@@ -79,7 +79,7 @@ class ReviewTokenizer(Tokenizer):
 class ExtractTokenizer(Tokenizer):
     """
     Custom tokenizer used for extracting tagged fields from the raw OCR data.
-    Splits on spaces and apostrophes, which it removes, as well as on dashes, which it keeps.
+    Splits on spaces, which it removes, as well as on dashes, which it keeps.
     Replaces \n char with [newline], which is treated as a single token.
     """
 
@@ -89,7 +89,7 @@ class ExtractTokenizer(Tokenizer):
     @staticmethod
     def run_tokenize(text: str) -> List[Token]:
         """
-        Primary tokenization method. Splits on spaces and apostrophes, which it removes,
+        Primary tokenization method. Splits on spaces, which it removes,
         as well as on dashes, which it keeps. Returns a list of Flair Token objects.
         Replaces \n char with [newline], which is treated as a single token.
         Returns a list of Token objects.
@@ -101,15 +101,14 @@ class ExtractTokenizer(Tokenizer):
         index = -1
         for index, char in enumerate(text):
 
-            if char in " '":
+            if char == ' ':
                 if len(word) > 0:
-                    whitespace_after = char == " "
                     start_position = index - len(word)
                     tokens.append(
                         Token(
                             text=word,
                             start_position=start_position,
-                            whitespace_after=whitespace_after
+                            whitespace_after=True
                         )
                     )
                 word = ""
