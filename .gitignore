@@ -7,6 +7,7 @@ data
 tags/tagsource
 notebooks/.ipynb_checkpoints
 notebooks/old
+notebooks/website
 notebooks/temp.ipynb
 local
 writing
