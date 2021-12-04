@@ -13,7 +13,7 @@ def main():
 
     columns = {0: 'text', 1: 'tag'}
 
-    data_folder = 'flairparser'
+    data_folder = os.path.join('extractor', 'data')
 
     corpus: Corpus = ColumnCorpus(
         data_folder, columns,
@@ -38,7 +38,7 @@ def main():
     trainer : ModelTrainer = ModelTrainer(tagger, corpus)
 
     trainer.train(
-        os.path.join('labeler', 'models'),
+        os.path.join('extractor', 'models'),
         learning_rate=0.1,
         mini_batch_size=32,
         max_epochs=150
