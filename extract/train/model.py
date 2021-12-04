@@ -14,8 +14,12 @@ def main():
     # forward vs backward
     is_forward_lm = True
 
-    # all legal characters for this project are contained in the default dictionary
+    # most legal characters are available in the default char dictionary
     dictionary: Dictionary = Dictionary.load('chars')
+
+    # with the exception of a special newline character we will use to allow 
+    # the tagger to use newlines in ColumnCorpus
+    dictionary.add_item('[newline]')
 
     # our dataset is mostly made up of thousands of arbitrary abbreviations,
     # so we specify a character-level model
