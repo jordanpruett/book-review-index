@@ -4,7 +4,7 @@
 __pycache__
 
 data
-tags/tagsource
+tags
 notebooks/.ipynb_checkpoints
 notebooks/old
 notebooks/website
