@@ -1,3 +1,8 @@
+import os
+
+import torch
+import flair
+
 from flair.data import Corpus
 from flair.datasets import ColumnCorpus
 from flair.embeddings import FlairEmbeddings
