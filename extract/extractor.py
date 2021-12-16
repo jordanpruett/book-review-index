@@ -1,10 +1,11 @@
 
-from dataclasses import dataclass
+from dataclasses import dataclass, field
+from typing import List
 
 from flair.models import SequenceTagger
 from flair.data import Sentence
 
-from tokenizer import ExtractTokenizer
+from .tokenizer import ExtractTokenizer
 
 @dataclass
 class Entry:
@@ -12,9 +13,9 @@ class Entry:
     Class for representing an entry extracted from raw OCR of the Book Review Index.
     """
     full_string: str = ''
-    parsed_author: list = []
-    parsed_title: list = []
-    reviews: list = []
+    parsed_author: List = field(default_factory=lambda: [])
+    parsed_title: List = field(default_factory=lambda: [])
+    reviews: List = field(default_factory=lambda: [])
     start_pos: int = None
     end_pos: int = None
 
