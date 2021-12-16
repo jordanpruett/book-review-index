@@ -13,7 +13,7 @@ def main():
 
     columns = {0: 'text', 1: 'tag'}
 
-    data_folder = os.path.join('extractor', 'data')
+    data_folder = os.path.join('extractor', 'simdata')
 
     corpus: Corpus = ColumnCorpus(
         data_folder, columns,
@@ -38,9 +38,9 @@ def main():
     trainer : ModelTrainer = ModelTrainer(tagger, corpus)
 
     trainer.train(
-        os.path.join('extractor', 'models'),
+        os.path.join('extractor', 'simmodel'),
         learning_rate=0.1,
-        mini_batch_size=32,
+        mini_batch_size=64,
         max_epochs=150
     )
 
