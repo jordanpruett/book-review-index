@@ -4,7 +4,7 @@ from dataclasses import dataclass
 from flair.models import SequenceTagger
 from flair.data import Sentence
 
-from tokenize import ExtractTokenizer
+from tokenizer import ExtractTokenizer
 
 @dataclass
 class Entry:
@@ -36,7 +36,7 @@ class Entry:
 class Extractor:
     """
     Main class used for extracting individual fields from the raw OCR text of
-    the Book Review Index. 
+    the Book Review Index.
 
     Note that the model was trained on the 1965-1984 data specifically, which had
     the largest gaps from the Regex-based extraction method.
@@ -81,7 +81,7 @@ class Extractor:
                 for label in span.labels:
 
                     if current_entry.reviews and (label.value == 'T' or label.value == 'A'):
-                        
+
                         current_entry.full_string = text[current_entry.start_pos:current_entry.end_pos]
                         entries.append(current_entry)
                         current_entry = Entry(start_pos=current_entry.end_pos)
@@ -91,7 +91,7 @@ class Extractor:
                     else:
                         current_entry.add_by_tag(label.value, span.text)
                         current_entry.end_pos = span.end_pos
-            
+
             if not final:
                 chunk_start = chunk_start + entries[-2].end_pos # end pos is indexed within chunk, not within full text
                 entries = entries[:-1]              # remove the last book, which becomes the beginning of the next chunk
