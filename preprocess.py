@@ -4,7 +4,7 @@ import pandas as pd
 from flair.data import Sentence
 
 from extract.reviewparser import ReviewParser
-from extract.reviewtokenizer import ReviewTokenizer
+from extract.tokenizer import ReviewTokenizer
 
 
 def main():

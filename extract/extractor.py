@@ -76,7 +76,7 @@ class Extractor:
                 use_tokenizer=self.tokenizer,
             )
             self.model.predict(sentence)
-            current_entry = Entry(start_pos=0)
+            current_entry = Entry(start_pos=chunk_start)
             for span in sentence.get_spans():
 
                 for label in span.labels:
@@ -87,19 +87,20 @@ class Extractor:
                         entries.append(current_entry)
                         current_entry = Entry(start_pos=current_entry.end_pos)
                         current_entry.add_by_tag(label.value, span.text)
-                        current_entry.end_pos = span.end_pos
+                        current_entry.end_pos = chunk_start + span.end_pos # end pos is indexed within chunk, not within full text
 
                     else:
                         current_entry.add_by_tag(label.value, span.text)
-                        current_entry.end_pos = span.end_pos
+                        current_entry.end_pos = chunk_start + span.end_pos
 
             if not final:
-                chunk_start = chunk_start + entries[-2].end_pos # end pos is indexed within chunk, not within full text
+                chunk_start = entries[-2].end_pos 
                 entries = entries[:-1]              # remove the last book, which becomes the beginning of the next chunk
                                                     # we do this because we can't be sure it is a complete entry
             else:
+                current_entry.full_string = text[current_entry.start_pos:current_entry.end_pos]
                 entries.append(current_entry)
-            if verbose >= 1:
+            if verbose:
                 percent_complete = round(chunk_start / total, 5) * 100
                 print(f'Extracted {len(entries)} books. {percent_complete}% of text parsed.')
 
