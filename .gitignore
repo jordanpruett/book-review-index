@@ -5,6 +5,7 @@ __pycache__
 
 data
 tags
+images
 notebooks/.ipynb_checkpoints
 notebooks/old
 notebooks/website
